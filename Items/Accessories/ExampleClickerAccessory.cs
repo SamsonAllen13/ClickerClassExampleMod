@@ -40,8 +40,8 @@ namespace ClickerClassExampleMod.Items.Accessories
 			//Use these methods to adjust clicker class related variables (treat them like player.meleeDamage etc.)
 			//Only a small sample here
 			ClickerCompat.SetDamageAdd(player, 0.2f);
-			float fluct = (float)Math.Sin(2 * Math.PI * Main.GameUpdateCount % 60 / 60f);
-			ClickerCompat.SetClickerRadiusAdd(player, fluct);
+			float fluct = 1f + (float)Math.Sin(2 * Math.PI * (Main.GameUpdateCount % 60) / 60f);
+			ClickerCompat.SetClickerRadiusAdd(player, fluct / 2);
 			ClickerCompat.SetClickerBonusAdd(player, 1);
 		}
 	}
