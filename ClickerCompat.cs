@@ -11,23 +11,11 @@ namespace ClickerClassExampleMod
 	/// </summary>
 	internal static class ClickerCompat
 	{
-		//GENERAL INFO - PlEASE READ!
-		//Depending on what you want to do with your mod, there are a few things to concider/do
-		//First: Read this to familiarize yourself with cross mod concepts: 
-		//https://github.com/tModLoader/tModLoader/wiki/Expert-Cross-Mod-Content
-
-		//If you want to make a hard dependency mod that won't work by itself with Clicker Class, in your build.txt, add
-		//    modReference = ClickerClass
-
-		//If you want to make a soft dependency mod that will work by itself, but will have additional content with Clicker Class, concider doing the following for added content (items, projectiles etc)
-		// - Override the Autoload hook, and return true/false depending on if 'ClickerCompat.ClickerClass' is null
-		//    That will make that content not load if Clicker Class isn't loaded
-		//    You can still use the other calls just fine but they won't do anything (i.e. 'IsClickerWeapon' will always return false since Clicker Class isn't loaded)
-		// - in your build.txt, add
-		//    loadAfter = ClickerClass
-		//    That will make sure your mod loads after it, making your logic always follow after Clicker Class, preventing potential value mismatches
-
+		//GENERAL INFO - PLEASE READ THIS FIRST!
 		//-----------------------
+		//https://github.com/SamsonAllen13/ClickerClassExampleMod/wiki
+		//-----------------------
+
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
 		internal static readonly Version apiVersion = new Version(1, 2);
