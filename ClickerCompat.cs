@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod
 {
-	// Copy this file for your mod, change the namespace above to yours, and read the comments. It is recommended to use Visual Studio for this, as it will auto recommend to fill missing usings (for ClickerCompat)
+	// Copy this file for your mod, change the namespace above to yours, and read the comments
 	/// <summary>
 	/// Central file used for mod.Call wrappers.
 	/// </summary>
