@@ -39,10 +39,13 @@ namespace ClickerClassExampleMod.Items.Accessories
 		{
 			//Use these methods to adjust clicker class related variables (treat them like player.meleeDamage etc.)
 			//Only a small sample here
+			//If you use VS, just mouseover the method name to see what it does
 			ClickerCompat.SetDamageAdd(player, 0.2f);
+			ClickerCompat.SetClickerBonusAdd(player, 1);
+
+			//Makes the radius go in a wave motion from 0 to 100 additional pixels
 			float fluct = 1f + (float)Math.Sin(2 * Math.PI * (Main.GameUpdateCount % 60) / 60f);
 			ClickerCompat.SetClickerRadiusAdd(player, fluct / 2);
-			ClickerCompat.SetClickerBonusAdd(player, 1);
 		}
 	}
 }
