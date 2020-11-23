@@ -1,7 +1,7 @@
 author = DivermanSam, Barometz and direwolf420
 version = 1.0
 displayName = The Clicker Class Example Mod
-homepage = https://discord.com/invite/ZyYdrZg
+homepage = https://github.com/SamsonAllen13/ClickerClassExampleMod
 includePDB = true
 buildIgnore = *.csproj, *.sln, *.user, *.md, obj\*, bin\*, .vs\*, .git\*, .gitignore
 loadAfter = ClickerClass

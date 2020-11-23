@@ -1,1 +1,2 @@
-ClickerClassExampleMod
+ClickerClassExampleMod: An Example Mod for Clicker Class compatibility
+https://discord.com/invite/ZyYdrZg for the Thorium Mod discord (where the clicker class channel is)
