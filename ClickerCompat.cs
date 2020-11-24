@@ -227,18 +227,50 @@ namespace ClickerClassExampleMod
 		/// Call to get the players' click amount (how many clicks done)
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static float GetClickAmount(Player player)
+		public static int GetClickAmount(Player player)
 		{
-			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickAmount") as float? ?? 0;
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickAmount") as int? ?? 0;
 		}
 
 		/// <summary>
 		/// Call to get the players' total clicks required for the next effect to trigger
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static float GetClickerAmountTotal(Player player)
+		public static int GetClickerAmountTotal(Player player)
 		{
-			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerAmountTotal") as float? ?? 1;
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerAmountTotal") as int? ?? 1;
+		}
+
+		/// <summary>
+		/// Call to check if the player is wearing a specific set. Supported sets:
+		/// Motherboard, Overclock, Precursor, Mice
+		/// </summary>
+		/// <param name="player">The player</param>
+		public static bool GetArmorSet(Player player, string set)
+		{
+			return ClickerClass?.Call("GetArmorSet", versionString, player, set) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
+		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove.
+		/// Visual variants (i.e. EnchantedLED2) are not gettable
+		/// </summary>
+		/// <param name="player">The player</param>
+		public static bool GetAccessory(Player player, string accessory)
+		{
+			return ClickerClass?.Call("GetAccessory", versionString, player, accessory) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
+		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove.
+		/// EnchantedLED and Cookie have a variant with "2" added to them that is a visual variation.
+		/// </summary>
+		/// <param name="player">The player</param>
+		public static void SetAccessory(Player player, string accessory)
+		{
+			ClickerClass?.Call("SetAccessory", versionString, player, accessory);
 		}
 
 		/// <summary>

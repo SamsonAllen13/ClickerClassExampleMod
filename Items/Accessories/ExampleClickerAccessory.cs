@@ -8,7 +8,7 @@ namespace ClickerClassExampleMod.Items.Accessories
 	//Sample code for a clicker related item
 	public class ExampleClickerAccessory : ModItem
 	{
-		//Optional, if you only want this item to exist only when Clicker Class is enabled
+		//Optional, if you want this item to exist only when Clicker Class is enabled
 		public override bool Autoload(ref string name)
 		{
 			return ClickerCompat.ClickerClass != null;
@@ -42,6 +42,9 @@ namespace ClickerClassExampleMod.Items.Accessories
 			//If you use VS, just mouseover the method name to see what it does
 			ClickerCompat.SetDamageAdd(player, 0.2f);
 			ClickerCompat.SetClickerBonusAdd(player, 1);
+
+			//Enables the special effect of the "Glass Of Milk" accessory
+			ClickerCompat.SetAccessory(player, "GlassOfMilk");
 
 			//Makes the radius go in a wave motion from 0 to 100 additional pixels
 			float fluct = 1f + (float)Math.Sin(2 * Math.PI * (Main.GameUpdateCount % 60) / 60f);
