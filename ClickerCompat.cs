@@ -14,11 +14,14 @@ namespace ClickerClassExampleMod
 		//GENERAL INFO - PLEASE READ THIS FIRST!
 		//-----------------------
 		//https://github.com/SamsonAllen13/ClickerClassExampleMod/wiki
+		//
+		//This file is kept up-to-date to the latest Clicker Class release. You are encouraged to not edit this file, and when an update happens, copy&replace this file again.
+		//Nothing will happen if Clicker Class updates and your mod doesn't, it's your choice to update it further
 		//-----------------------
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2);
+		internal static readonly Version apiVersion = new Version(1, 2, 1);
 
 		internal static string versionString;
 
