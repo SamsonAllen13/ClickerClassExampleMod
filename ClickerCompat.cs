@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -21,7 +22,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 1);
+		internal static readonly Version apiVersion = new Version(1, 2, 2);
 
 		internal static string versionString;
 
@@ -29,7 +30,8 @@ namespace ClickerClassExampleMod
 
 		internal static Mod ClickerClass
 		{
-			get {
+			get
+			{
 				if (clickerClass == null)
 				{
 					clickerClass = ModLoader.GetMod("ClickerClass");
@@ -53,7 +55,7 @@ namespace ClickerClassExampleMod
 
 		//Here is a list of available calls you can do. Call them where required/recommended like this: ClickerCompat.SetClickerWeaponDefaults(item);
 		//If they return something, they will try to default to a sensible value if Clicker Class is not loaded
-		//Will throw an exception if something isn't right
+		//Will throw an exception if something isn't right. CHECK THE LOGS!
 		#region General Calls
 		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> to set important default fields for a clicker weapon. Set fields:
@@ -89,9 +91,35 @@ namespace ClickerClassExampleMod
 		/// Do not call <see cref="RegisterClickerItem"/> with it as this method does this already by itself
 		/// </summary>
 		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
-		internal static void RegisterClickerWeapon(ModItem modItem)
+		/// <param name="borderTexture">The path to the border texture (optional)</param>
+		internal static void RegisterClickerWeapon(ModItem modItem, string borderTexture = null)
 		{
-			ClickerClass?.Call("RegisterClickerWeapon", versionString, modItem);
+			ClickerClass?.Call("RegisterClickerWeapon", versionString, modItem, borderTexture);
+		}
+
+		/// <summary>
+		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModItem.SetStaticDefaults"/> to register this click effect
+		/// </summary>
+		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
+		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
+		/// <param name="displayName">The name of the effect</param>
+		/// <param name="description">The basic description of the effect, string.Empty for none</param>
+		/// <param name="amount">The amount of clicks required to trigger the effect</param>
+		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, Vector2, int, int, float> action)
+		{
+			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, color, action) as string;
+		}
+
+		/// <summary>
+		/// Returns the border texture of the item of this type
+		/// </summary>
+		/// <param name="type">The item type</param>
+		/// <returns>The path to the border texture, null if not found</returns>
+		internal static string GetPathToBorderTexture(int type)
+		{
+			return ClickerClass?.Call("GetPathToBorderTexture", versionString, type) as string;
 		}
 
 		/// <summary>
@@ -161,7 +189,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
 		/// <param name="color">The color</param>
-		public static void SetColor(Item item, Color color)
+		internal static void SetColor(Item item, Color color)
 		{
 			ClickerClass?.Call("SetColor", versionString, item, color);
 		}
@@ -171,29 +199,29 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
 		/// <param name="radius">The additional radius</param>
-		public static void SetRadius(Item item, float radius)
+		internal static void SetRadius(Item item, float radius)
 		{
 			ClickerClass?.Call("SetRadius", versionString, item, radius);
 		}
 
 		/// <summary>
-		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to set the amount of clicks required for an effect to trigger
+		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to add an effect to it
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
-		/// <param name="amount">the amount of clicks</param>
-		public static void SetAmount(Item item, int amount)
+		/// <param name="effect">the unique effect name</param>
+		internal static void AddEffect(Item item, string effect)
 		{
-			ClickerClass?.Call("SetAmount", versionString, item, amount);
+			ClickerClass?.Call("AddEffect", versionString, item, effect);
 		}
 
 		/// <summary>
-		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to define its effect
+		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to to add effects to it
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
-		/// <param name="effect">the effect name</param>
-		public static void SetEffect(Item item, string effect)
+		/// <param name="effects">the effect names</param>
+		internal static void AddEffect(Item item, IEnumerable<string> effects)
 		{
-			ClickerClass?.Call("SetEffect", versionString, item, effect);
+			ClickerClass?.Call("AddEffect", versionString, item, effects);
 		}
 
 		/// <summary>
@@ -201,7 +229,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
 		/// <param name="type">the dust type</param>
-		public static void SetDust(Item item, int type)
+		internal static void SetDust(Item item, int type)
 		{
 			ClickerClass?.Call("SetDust", versionString, item, type);
 		}
@@ -210,7 +238,7 @@ namespace ClickerClassExampleMod
 		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker item to make it display total click count in the tooltip
 		/// </summary>
 		/// <param name="item">The clicker class item</param>
-		public static void SetDisplayTotalClicks(Item item)
+		internal static void SetDisplayTotalClicks(Item item)
 		{
 			ClickerClass?.Call("SetDisplayTotalClicks", versionString, item);
 		}
@@ -221,7 +249,7 @@ namespace ClickerClassExampleMod
 		/// Call to get the players' clicker radius (multiply by 100 for pixels)
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static float GetClickerRadius(Player player)
+		internal static float GetClickerRadius(Player player)
 		{
 			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerRadius") as float? ?? 1f;
 		}
@@ -230,18 +258,29 @@ namespace ClickerClassExampleMod
 		/// Call to get the players' click amount (how many clicks done)
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static int GetClickAmount(Player player)
+		internal static int GetClickAmount(Player player)
 		{
 			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickAmount") as int? ?? 0;
 		}
 
 		/// <summary>
-		/// Call to get the players' total clicks required for the next effect to trigger
+		/// Call to get the players' clicks per second
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static int GetClickerAmountTotal(Player player)
+		internal static int GetClickerPerSecond(Player player)
 		{
-			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerAmountTotal") as int? ?? 1;
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerPerSecond") as int? ?? 0;
+		}
+
+		/// <summary>
+		/// Call to get the players' total clicks required for the given effect to trigger on the item
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="item">The clicker item</param>
+		/// <param name="effect">The unique effect name</param>
+		internal static int GetClickerAmountTotal(Player player, Item item, string effect)
+		{
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerAmountTotal", item, effect) as int? ?? 1;
 		}
 
 		/// <summary>
@@ -249,7 +288,7 @@ namespace ClickerClassExampleMod
 		/// Motherboard, Overclock, Precursor, Mice
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static bool GetArmorSet(Player player, string set)
+		internal static bool GetArmorSet(Player player, string set)
 		{
 			return ClickerClass?.Call("GetArmorSet", versionString, player, set) as bool? ?? false;
 		}
@@ -260,7 +299,7 @@ namespace ClickerClassExampleMod
 		/// Visual variants (i.e. EnchantedLED2) are not gettable
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static bool GetAccessory(Player player, string accessory)
+		internal static bool GetAccessory(Player player, string accessory)
 		{
 			return ClickerClass?.Call("GetAccessory", versionString, player, accessory) as bool? ?? false;
 		}
@@ -271,7 +310,7 @@ namespace ClickerClassExampleMod
 		/// EnchantedLED and Cookie have a variant with "2" added to them that is a visual variation.
 		/// </summary>
 		/// <param name="player">The player</param>
-		public static void SetAccessory(Player player, string accessory)
+		internal static void SetAccessory(Player player, string accessory)
 		{
 			ClickerClass?.Call("SetAccessory", versionString, player, accessory);
 		}
@@ -281,7 +320,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">crit chance added</param>
-		public static void SetClickerCritAdd(Player player, int add)
+		internal static void SetClickerCritAdd(Player player, int add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerCritAdd", add);
 		}
@@ -291,7 +330,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">flat damage added</param>
-		public static void SetDamageFlatAdd(Player player, int add)
+		internal static void SetDamageFlatAdd(Player player, int add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerDamageFlatAdd", add);
 		}
@@ -301,7 +340,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">damage added in %</param>
-		public static void SetDamageAdd(Player player, float add)
+		internal static void SetDamageAdd(Player player, float add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerDamageAdd", add);
 		}
@@ -312,7 +351,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">amount of clicks to reduce</param>
-		public static void SetClickerBonusAdd(Player player, int add)
+		internal static void SetClickerBonusAdd(Player player, int add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerBonusAdd", add);
 		}
@@ -323,7 +362,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">% of total clicks</param>
-		public static void SetClickerBonusPercentAdd(Player player, float add)
+		internal static void SetClickerBonusPercentAdd(Player player, float add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerBonusPercentAdd", add);
 		}
@@ -333,10 +372,42 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">distance added in 100 pixels (1f = 100 pixel)</param>
-		public static void SetClickerRadiusAdd(Player player, float add)
+		internal static void SetClickerRadiusAdd(Player player, float add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerRadiusAdd", add);
 		}
+
+		/// <summary>
+		/// Enables the use of a click effect for this player
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="effect">The unique effect name</param>
+		internal static void EnableClickEffect(Player player, string effect)
+		{
+			ClickerClass?.Call("EnableClickEffect", versionString, player, effect);
+		}
+
+		/// <summary>
+		/// Enables the use of click effects for this player
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="effects">The unique effect names</param>
+		internal static void EnableClickEffect(Player player, IEnumerable<string> effects)
+		{
+			ClickerClass?.Call("EnableClickEffect", versionString, player, effects);
+		}
+
+		/// <summary>
+		/// Checks if the player has a click effect enabled
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="effect">The unique effect name</param>
+		/// <returns><see langword="true"/> if enabled</returns>
+		internal static bool HasClickEffect(Player player, string effect)
+		{
+			return ClickerClass?.Call("HasClickEffect", versionString, player, effect) as bool? ?? false;
+		}
+
 		#endregion
 	}
 }
