@@ -1,7 +1,7 @@
 ﻿using System;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod.Items.Accessories
 {
@@ -20,8 +20,8 @@ namespace ClickerClassExampleMod.Items.Accessories
 			ClickerCompat.RegisterClickerItem(this);
 
 			DisplayName.SetDefault("Example Clicker Accessory");
-			Tooltip.SetDefault("'Big Red Button'" +"\n" +
-				"20% increased clicker damage" +"\n" +
+			Tooltip.SetDefault("'Big Red Button'" + "\n" +
+				"20% increased clicker damage" + "\n" +
 				"Reduces the amount of clicks required for a click effect by 1" + "\n" +
 				"Gain up to 15% clicker damage based on your amount of clicks within a second" + "\n" +
 				"Every 15 clicks releases a burst of damaging chocolate" + "\n" +
