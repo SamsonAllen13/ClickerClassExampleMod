@@ -20,7 +20,8 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			//Here we register an optional border/outline texture aswell
 			ClickerCompat.RegisterClickerWeapon(this, borderTexture: "ClickerClassExampleMod/Items/Weapons/Clickers/ExampleClickerWithEffect_Outline");
 
-			//You want to cache the result to make accessing it easier in other places. For the purpose of the example, we don't
+			//We want to cache the result to make accessing it easier in other places. For the purpose of the example, we don't
+			//(Make sure to unload the saved string again in Mod.Unload()!)
 			string uniqueName = ClickerCompat.RegisterClickEffect(mod, "ExampleEffect", "Mini Clickers", "Creates 5 Mini Clickers around the cursor for 20% damage", 6, Color.Red, delegate (Player player, Vector2 position, int type, int damage, float knockBack)
 			{
 				Main.PlaySound(SoundID.Chat, (int)position.X, (int)position.Y, -1);
@@ -44,9 +45,19 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			//Here we use our custom effect, registered as 'modName:internalName'
 			ClickerCompat.AddEffect(item, "ClickerClassExampleMod:ExampleEffect");
 
-			//You can add more than one effect aswell! (Here using the IEnumerable overload to make it more compact)
-			ClickerCompat.AddEffect(item, new List<string> { "ClickerClass:DoubleClick2", "ClickerClass:Embrittle" });
-			//In total, 3 effects
+			//We can add more than one effect aswell! (Here using the IEnumerable overload to make it more compact)
+			ClickerCompat.AddEffect(item, new List<string> { "ClickerClass:Inferno", "ClickerClass:Embrittle" });
+
+			//We can also access all available effects and do stuff with it
+			//Here pick the first registered effect (random would be cool but Main.rand shouldn't be used in SetDefaults)
+			List<string> allEffects = ClickerCompat.GetAllEffectNames();
+			if (allEffects != null && allEffects.Count > 0)
+			{
+				ClickerCompat.AddEffect(item, allEffects[0]);
+				//If this happens to be one we already added, it won't do anything
+			}
+
+			//In total, atleast 3 effects
 
 			item.damage = 10;
 			item.width = 30;

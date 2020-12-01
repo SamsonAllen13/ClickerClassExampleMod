@@ -123,6 +123,41 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
+		/// Returns all existing effects' internal names
+		/// </summary>
+		/// <returns>IEnumerable[string]</returns>
+		internal static List<string> GetAllEffectNames()
+		{
+			return ClickerClass?.Call("GetAllEffectNames", versionString) as List<string>;
+		}
+
+		/// <summary>
+		/// Access an effect's stats. <see cref="null"/> if not found.
+		/// "InternalName": The unique name (string).
+		/// | "DisplayName": The displayed name (string).
+		/// | "Description": The description (string).
+		/// | "Amount": The amount of clicks to trigger the effect (int).
+		/// | "Color": The color (Color).
+		/// | "Action": The method ran when triggered (Action[Player, Vector2, int, int, float]).
+		/// </summary>
+		/// <param name="effect">The unique effect name</param>
+		/// <returns>Dictionary[string, object]</returns>
+		internal static Dictionary<string, object> GetClickEffectAsDict(string effect)
+		{
+			return ClickerClass?.Call("GetClickEffectAsDict", versionString, effect) as Dictionary<string, object>;
+		}
+
+		/// <summary>
+		/// Checks if an effect of this name exists
+		/// </summary>
+		/// <param name="effect">The unique name</param>
+		/// <returns><see langword="true"/> if valid</returns>
+		internal static bool IsClickEffect(string effect)
+		{
+			return ClickerClass?.Call("IsClickEffect", versionString, effect) as bool? ?? false;
+		}
+
+		/// <summary>
 		/// Call this to check if a projectile type belongs to the "clicker class" category
 		/// </summary>
 		/// <param name="type">The item type to be checked</param>
