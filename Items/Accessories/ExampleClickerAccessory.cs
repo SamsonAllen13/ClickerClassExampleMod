@@ -23,6 +23,8 @@ namespace ClickerClassExampleMod.Items.Accessories
 			Tooltip.SetDefault("'Big Red Button'" +"\n" +
 				"20% increased clicker damage" +"\n" +
 				"Reduces the amount of clicks required for a click effect by 1" + "\n" +
+				"Gain up to 15% clicker damage based on your amount of clicks within a second" + "\n" +
+				"Every 15 clicks releases a burst of damaging chocolate" + "\n" +
 				"Makes the radius pulsate up to 50% of the default radius");
 		}
 
@@ -45,6 +47,13 @@ namespace ClickerClassExampleMod.Items.Accessories
 
 			//Enables the special effect of the "Glass Of Milk" accessory
 			ClickerCompat.SetAccessory(player, "GlassOfMilk");
+
+			//Enabled the click effect given by Chocolate Chip
+			//You can use Clicker Classes base effects (you can find them in the source code), or your own ones
+			ClickerCompat.EnableClickEffect(player, "ClickerClass:ChocolateChip");
+
+			//How to check if an effect is enabled for the player
+			bool hasChocolateChip = ClickerCompat.HasClickEffect(player, "ClickerClass:ChocolateChip");
 
 			//Makes the radius go in a wave motion from 0 to 100 additional pixels
 			float fluct = 1f + (float)Math.Sin(2 * Math.PI * (Main.GameUpdateCount % 60) / 60f);
