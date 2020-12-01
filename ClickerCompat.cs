@@ -220,7 +220,7 @@ namespace ClickerClassExampleMod
 
 		#region Item Calls
 		/// <summary>
-		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to set its color used for various things
+		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to set its radius color
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
 		/// <param name="color">The color</param>
