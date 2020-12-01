@@ -31,9 +31,8 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			ClickerCompat.SetColor(item, Color.White);
 			ClickerCompat.SetDust(item, DustID.Fire);
 
-			//These two aren't finished/implemented properly yet so you can only use Clicker Classes base effects (you can find them in the source code)
-			ClickerCompat.SetEffect(item, "Embrittle");
-			ClickerCompat.SetAmount(item, 10);
+			//You can use Clicker Classes base effects (you can find them in the source code), or your own ones
+			ClickerCompat.AddEffect(item, "ClickerClass:DoubleClick");
 
 			item.damage = 4;
 			item.width = 30;
