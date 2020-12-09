@@ -22,7 +22,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 2);
+		internal static readonly Version apiVersion = new Version(1, 2, 3);
 
 		internal static string versionString;
 
@@ -133,7 +133,9 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Access an effect's stats. <see cref="null"/> if not found.
-		/// "InternalName": The unique name (string).
+		/// "Mod": The mod the effect belongs to (string).
+		/// | "InternalName": The internal name (string).
+		/// | "UniqueName": The unique name (string).
 		/// | "DisplayName": The displayed name (string).
 		/// | "Description": The description (string).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
