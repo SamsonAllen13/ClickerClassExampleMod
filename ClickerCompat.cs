@@ -102,7 +102,7 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
 		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
-		/// <param name="displayName">The name of the effect</param>
+		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
 		/// <param name="description">The basic description of the effect, string.Empty for none</param>
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
