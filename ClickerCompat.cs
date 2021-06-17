@@ -22,7 +22,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 4);
+		internal static readonly Version apiVersion = new Version(1, 2, 6);
 
 		internal static string versionString;
 
@@ -279,6 +279,15 @@ namespace ClickerClassExampleMod
 		{
 			ClickerClass?.Call("SetDisplayTotalClicks", versionString, item);
 		}
+
+		/// <summary>
+		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker item to make it display total money generated in the tooltip
+		/// </summary>
+		/// <param name="item">The clicker class item</param>
+		internal static void SetDisplayMoneyGenerated(Item item)
+		{
+			ClickerClass?.Call("SetDisplayMoneyGenerated", versionString, item);
+		}
 		#endregion
 
 		#region Player Calls
@@ -332,7 +341,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove.
+		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator.
 		/// Visual variants (i.e. EnchantedLED2) are not gettable
 		/// </summary>
 		/// <param name="player">The player</param>

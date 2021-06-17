@@ -20,7 +20,7 @@ namespace ClickerClassExampleMod.Items.Accessories
 			ClickerCompat.RegisterClickerItem(this);
 
 			DisplayName.SetDefault("Example Clicker Accessory");
-			Tooltip.SetDefault("'Big Red Button'" + "\n" +
+			Tooltip.SetDefault("'Big Red Button 2'" + "\n" +
 				"20% increased clicker damage" + "\n" +
 				"Reduces the amount of clicks required for a click effect by 1" + "\n" +
 				"Gain up to 15% clicker damage based on your amount of clicks within a second" + "\n" +

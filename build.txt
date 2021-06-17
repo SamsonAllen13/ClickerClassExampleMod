@@ -1,5 +1,5 @@
 author = DivermanSam, Barometz and direwolf420
-version = 1.2.4
+version = 1.2.6
 displayName = The Clicker Class Example Mod
 homepage = https://github.com/SamsonAllen13/ClickerClassExampleMod
 includePDB = true
