@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod
@@ -22,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 6);
+		internal static readonly Version apiVersion = new Version(1, 2, 7, 3);
 
 		internal static string versionString;
 
@@ -32,9 +33,9 @@ namespace ClickerClassExampleMod
 		{
 			get
 			{
-				if (clickerClass == null)
+				if (clickerClass == null && ModLoader.TryGetMod("ClickerClass", out var mod))
 				{
-					clickerClass = ModLoader.GetMod("ClickerClass");
+					clickerClass = mod;
 				}
 				return clickerClass;
 			}
@@ -59,13 +60,24 @@ namespace ClickerClassExampleMod
 		#region General Calls
 		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> to set important default fields for a clicker weapon. Set fields:
-		/// useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
+		/// DamageType, crit, useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
 		/// Only change them afterwards if you know what you are doing!
 		/// </summary>
 		/// <param name="item">The <see cref="Item"/> to set the defaults for</param>
 		internal static void SetClickerWeaponDefaults(Item item)
 		{
 			ClickerClass?.Call("SetClickerWeaponDefaults", versionString, item);
+		}
+
+		/// <summary>
+		/// Call in <see cref="ModProjectile.SetDefaults"/> to set important default fields for a clicker projectile. Set fields:
+		/// DamageType.
+		/// Only change them afterwards if you know what you are doing!
+		/// </summary>
+		/// <param name="proj">The <see cref="Projectile"/> to set the defaults for</param>
+		internal static void SetClickerProjectileDefaults(Projectile proj)
+		{
+			ClickerClass?.Call("SetClickerProjectileDefaults", versionString, proj);
 		}
 
 		/// <summary>
@@ -107,7 +119,7 @@ namespace ClickerClassExampleMod
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float> action)
 		{
 			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, color, action) as string;
 		}
@@ -341,8 +353,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator.
-		/// Visual variants (i.e. EnchantedLED2) are not gettable
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetAccessory(Player player, string accessory)
@@ -352,13 +363,32 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
-		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove.
-		/// EnchantedLED and Cookie have a variant with "2" added to them that is a visual variation.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessory(Player player, string accessory)
 		{
 			ClickerClass?.Call("SetAccessory", versionString, player, accessory);
+		}
+
+		/// <summary>
+		/// Call to check if a specific accessory effect that spawns projectiles is enabled. Returns the item if enabled. Supported accessories:
+		/// Cookie.
+		/// </summary>
+		/// <param name="player">The player</param>
+		internal static Item GetAccessoryItem(Player player, string accessory)
+		{
+			return ClickerClass?.Call("GetAccessoryItem", versionString, player, accessory) as Item ?? null;
+		}
+
+		/// <summary>
+		/// Call to set a specific player accessory effect that spawns projectiles. Supported accessories:
+		/// Cookie.
+		/// </summary>
+		/// <param name="player">The player</param>
+		internal static void SetAccessoryItem(Player player, string accessory, Item item)
+		{
+			ClickerClass?.Call("SetAccessoryItem", versionString, player, accessory, item);
 		}
 
 		/// <summary>
@@ -453,7 +483,6 @@ namespace ClickerClassExampleMod
 		{
 			return ClickerClass?.Call("HasClickEffect", versionString, player, effect) as bool? ?? false;
 		}
-
 		#endregion
 	}
 }

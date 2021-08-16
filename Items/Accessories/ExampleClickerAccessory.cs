@@ -9,7 +9,7 @@ namespace ClickerClassExampleMod.Items.Accessories
 	public class ExampleClickerAccessory : ModItem
 	{
 		//Optional, if you want this item to exist only when Clicker Class is enabled
-		public override bool Autoload(ref string name)
+		public override bool IsLoadingEnabled(Mod mod)
 		{
 			return ClickerCompat.ClickerClass != null;
 		}
@@ -30,11 +30,11 @@ namespace ClickerClassExampleMod.Items.Accessories
 
 		public override void SetDefaults()
 		{
-			item.width = 28;
-			item.height = 20;
-			item.value = 100000;
-			item.rare = ItemRarityID.LightRed;
-			item.accessory = true;
+			Item.width = 28;
+			Item.height = 20;
+			Item.value = 100000;
+			Item.rare = ItemRarityID.LightRed;
+			Item.accessory = true;
 		}
 
 		public override void UpdateAccessory(Player player, bool hideVisual)
@@ -47,6 +47,10 @@ namespace ClickerClassExampleMod.Items.Accessories
 
 			//Enables the special effect of the "Glass Of Milk" accessory
 			ClickerCompat.SetAccessory(player, "GlassOfMilk");
+
+			//For the Cookie effect, you would need to set both the item and one of the visual variants
+			//ClickerCompat.SetAccessoryItem(player, "Cookie", Item);
+			//ClickerCompat.SetAccessory(player, "CookieVisual");
 
 			//Enabled the click effect given by Chocolate Chip
 			//You can use Clicker Classes base effects (you can find them in the source code), or your own ones
