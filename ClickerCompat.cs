@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 7, 3);
+		internal static readonly Version apiVersion = new Version(1, 2, 8);
 
 		internal static string versionString;
 
@@ -60,7 +60,7 @@ namespace ClickerClassExampleMod
 		#region General Calls
 		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> to set important default fields for a clicker weapon. Set fields:
-		/// DamageType, crit, useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
+		/// DamageType, useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
 		/// Only change them afterwards if you know what you are doing!
 		/// </summary>
 		/// <param name="item">The <see cref="Item"/> to set the defaults for</param>
