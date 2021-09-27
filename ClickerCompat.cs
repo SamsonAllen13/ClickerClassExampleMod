@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 8);
+		internal static readonly Version apiVersion = new Version(1, 3, 0);
 
 		internal static string versionString;
 
@@ -87,6 +87,17 @@ namespace ClickerClassExampleMod
 		internal static void RegisterClickerProjectile(ModProjectile modProj)
 		{
 			ClickerClass?.Call("RegisterClickerProjectile", versionString, modProj);
+		}
+
+		/// <summary>
+		/// Call this in <see cref="ModProjectile.SetStaticDefaults"/> to register this projectile into the "clicker weapon" category.
+		/// <br>This is only for projectiles spawned by clickers directly (Item.shoot). Clicker Class only uses one such projectile for all it's clickers. Only use this if you know what you are doing!</br>
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="modProj">The <see cref="ModProjectile"/> that is to be registered</param>
+		internal static void RegisterClickerWeaponProjectile(ModProjectile modProj)
+		{
+			ClickerClass?.Call("RegisterClickerWeaponProjectile", versionString, modProj);
 		}
 
 		/// <summary>
@@ -189,6 +200,28 @@ namespace ClickerClassExampleMod
 		internal static bool IsClickerProj(Projectile proj)
 		{
 			return ClickerClass?.Call("IsClickerProj", versionString, proj) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if a projectile type belongs to the "clicker weapon" category.
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="type">The item type to be checked</param>
+		/// <returns><see langword="true"/> if that category</returns>
+		internal static bool IsClickerWeaponProj(int type)
+		{
+			return ClickerClass?.Call("IsClickerWeaponProj", versionString, type) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if a projectile belongs to the "clicker weapon" category.
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="proj">The <see cref="Projectile"/> to be checked</param>
+		/// <returns><see langword="true"/> if that category</returns>
+		internal static bool IsClickerWeaponProj(Projectile proj)
+		{
+			return ClickerClass?.Call("IsClickerWeaponProj", versionString, proj) as bool? ?? false;
 		}
 
 		/// <summary>
