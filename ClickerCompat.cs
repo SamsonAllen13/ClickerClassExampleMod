@@ -11,7 +11,7 @@ namespace ClickerClassExampleMod
 	/// <summary>
 	/// Central file used for mod.Call wrappers.
 	/// </summary>
-	internal static class ClickerCompat
+	internal class ClickerCompat : ModSystem
 	{
 		//GENERAL INFO - PLEASE READ THIS FIRST!
 		//-----------------------
@@ -41,14 +41,12 @@ namespace ClickerClassExampleMod
 			}
 		}
 
-		//Call this in your main Mod class in the Load hook like this: ClickerCompat.Load();
-		internal static void Load()
+		public override void Load()
 		{
 			versionString = apiVersion.ToString();
 		}
 
-		//Call this in your main Mod class in the Unload hook like this: ClickerCompat.Unload();
-		internal static void Unload()
+		public override void Unload()
 		{
 			clickerClass = null;
 			versionString = null;
@@ -128,11 +126,29 @@ namespace ClickerClassExampleMod
 		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
 		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
+		/// <param name="colorFunc">The (dynamic) text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float> action)
+		{
+			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action) as string;
+		}
+
+		/// <summary>
+		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModItem.SetStaticDefaults"/> to register this click effect
+		/// </summary>
+		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
+		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
+		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
+		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
+		/// <param name="amount">The amount of clicks required to trigger the effect</param>
+		/// <param name="color">The text color representing the effect in the tooltip</param>
+		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <remarks>For dynamic colors, use the Func[Color] overload</remarks>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
 		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float> action)
 		{
-			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, color, action) as string;
+			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action);
 		}
 
 		/// <summary>
@@ -156,14 +172,14 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Access an effect's stats. <see cref="null"/> if not found.
-		/// "Mod": The mod the effect belongs to (string).
+		/// "Mod": The mod the effect belongs to (Mod).
 		/// | "InternalName": The internal name (string).
-		/// | "UniqueName": The unique name (string).
+		/// | "UniqueName": The unique name (string) (should match the input string).
 		/// | "DisplayName": The displayed name (string).
 		/// | "Description": The description (string).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
-		/// | "Color": The color (Color).
-		/// | "Action": The method ran when triggered (Action[Player, Vector2, int, int, float]).
+		/// | "ColorFunc": The color (Color) if invoked.
+		/// | "Action": The method ran when triggered (Action[Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float]).
 		/// </summary>
 		/// <param name="effect">The unique effect name</param>
 		/// <returns>Dictionary[string, object]</returns>
