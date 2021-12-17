@@ -402,7 +402,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetAccessory(Player player, string accessory)
@@ -412,7 +412,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessory(Player player, string accessory)
