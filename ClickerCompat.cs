@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 3, 0);
+		internal static readonly Version apiVersion = new Version(1, 3, 1, 2);
 
 		internal static string versionString;
 
@@ -129,7 +129,7 @@ namespace ClickerClassExampleMod
 		/// <param name="colorFunc">The (dynamic) text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
 		{
 			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action) as string;
 		}
@@ -146,7 +146,7 @@ namespace ClickerClassExampleMod
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <remarks>For dynamic colors, use the Func[Color] overload</remarks>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
 		{
 			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action);
 		}
@@ -179,7 +179,7 @@ namespace ClickerClassExampleMod
 		/// | "Description": The description (string).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
 		/// | "ColorFunc": The color (Color) if invoked.
-		/// | "Action": The method ran when triggered (Action[Player, ProjectileSource_Item_WithAmmo, Vector2, int, int, float]).
+		/// | "Action": The method ran when triggered (Action[Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float]).
 		/// </summary>
 		/// <param name="effect">The unique effect name</param>
 		/// <returns>Dictionary[string, object]</returns>

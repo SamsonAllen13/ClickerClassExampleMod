@@ -30,7 +30,7 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			ClickerCompat.RegisterClickerWeapon(this, borderTexture: "ClickerClassExampleMod/Items/Weapons/Clickers/ExampleClickerWithEffect_Outline");
 
 			//Here we register a click effect which we reference in SetDefaults through AddEffect
-			string uniqueName = ClickerCompat.RegisterClickEffect(Mod, "ExampleEffect", "Mini Clickers", "Creates 5 Mini Clickers around the cursor for 20% damage", 6, Color.Red, delegate (Player player, ProjectileSource_Item_WithAmmo source, Vector2 position, int type, int damage, float knockBack)
+			string uniqueName = ClickerCompat.RegisterClickEffect(Mod, "ExampleEffect", "Mini Clickers", "Creates 5 Mini Clickers around the cursor for 20% damage", 6, Color.Red, delegate (Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, int type, int damage, float knockBack)
 			{
 				SoundEngine.PlaySound(SoundID.Chat, (int)position.X, (int)position.Y, -1);
 				for (int i = 0; i < 5; i++)
