@@ -35,7 +35,7 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 				SoundEngine.PlaySound(SoundID.Chat, (int)position.X, (int)position.Y, -1);
 				for (int i = 0; i < 5; i++)
 				{
-					Projectile.NewProjectile(source, Main.MouseWorld + 20 * Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi), Vector2.Zero, ModContent.ProjectileType<MiniClicker>(), (int)(damage * 0.2f), 0f, Main.myPlayer);
+					Projectile.NewProjectile(source, position + 20 * Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi), Vector2.Zero, ModContent.ProjectileType<MiniClicker>(), (int)(damage * 0.2f), 0f, Main.myPlayer);
 				}
 			});
 
