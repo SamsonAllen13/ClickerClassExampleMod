@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod
@@ -10,7 +11,7 @@ namespace ClickerClassExampleMod
 	/// <summary>
 	/// Central file used for mod.Call wrappers.
 	/// </summary>
-	internal static class ClickerCompat
+	internal class ClickerCompat : ModSystem
 	{
 		//GENERAL INFO - PLEASE READ THIS FIRST!
 		//-----------------------
@@ -22,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 2, 6);
+		internal static readonly Version apiVersion = new Version(1, 3, 2);
 
 		internal static string versionString;
 
@@ -32,22 +33,20 @@ namespace ClickerClassExampleMod
 		{
 			get
 			{
-				if (clickerClass == null)
+				if (clickerClass == null && ModLoader.TryGetMod("ClickerClass", out var mod))
 				{
-					clickerClass = ModLoader.GetMod("ClickerClass");
+					clickerClass = mod;
 				}
 				return clickerClass;
 			}
 		}
 
-		//Call this in your main Mod class in the Load hook like this: ClickerCompat.Load();
-		internal static void Load()
+		public override void Load()
 		{
 			versionString = apiVersion.ToString();
 		}
 
-		//Call this in your main Mod class in the Unload hook like this: ClickerCompat.Unload();
-		internal static void Unload()
+		public override void Unload()
 		{
 			clickerClass = null;
 			versionString = null;
@@ -59,7 +58,7 @@ namespace ClickerClassExampleMod
 		#region General Calls
 		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> to set important default fields for a clicker weapon. Set fields:
-		/// useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
+		/// DamageType, useTime, useAnimation, useStyle, holdStyle, noMelee, shoot, shootSpeed.
 		/// Only change them afterwards if you know what you are doing!
 		/// </summary>
 		/// <param name="item">The <see cref="Item"/> to set the defaults for</param>
@@ -69,12 +68,34 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
+		/// Call in <see cref="ModProjectile.SetDefaults"/> to set important default fields for a clicker projectile. Set fields:
+		/// DamageType.
+		/// Only change them afterwards if you know what you are doing!
+		/// </summary>
+		/// <param name="proj">The <see cref="Projectile"/> to set the defaults for</param>
+		internal static void SetClickerProjectileDefaults(Projectile proj)
+		{
+			ClickerClass?.Call("SetClickerProjectileDefaults", versionString, proj);
+		}
+
+		/// <summary>
 		/// Call this in <see cref="ModProjectile.SetStaticDefaults"/> to register this projectile into the "clicker class" category
 		/// </summary>
 		/// <param name="modProj">The <see cref="ModProjectile"/> that is to be registered</param>
 		internal static void RegisterClickerProjectile(ModProjectile modProj)
 		{
 			ClickerClass?.Call("RegisterClickerProjectile", versionString, modProj);
+		}
+
+		/// <summary>
+		/// Call this in <see cref="ModProjectile.SetStaticDefaults"/> to register this projectile into the "clicker weapon" category.
+		/// <br>This is only for projectiles spawned by clickers directly (Item.shoot). Clicker Class only uses one such projectile for all it's clickers. Only use this if you know what you are doing!</br>
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="modProj">The <see cref="ModProjectile"/> that is to be registered</param>
+		internal static void RegisterClickerWeaponProjectile(ModProjectile modProj)
+		{
+			ClickerClass?.Call("RegisterClickerWeaponProjectile", versionString, modProj);
 		}
 
 		/// <summary>
@@ -105,11 +126,29 @@ namespace ClickerClassExampleMod
 		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
 		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
+		/// <param name="colorFunc">The (dynamic) text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
 		{
-			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, color, action) as string;
+			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action) as string;
+		}
+
+		/// <summary>
+		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModItem.SetStaticDefaults"/> to register this click effect
+		/// </summary>
+		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
+		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
+		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
+		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
+		/// <param name="amount">The amount of clicks required to trigger the effect</param>
+		/// <param name="color">The text color representing the effect in the tooltip</param>
+		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <remarks>For dynamic colors, use the Func[Color] overload</remarks>
+		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
+		{
+			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action);
 		}
 
 		/// <summary>
@@ -133,14 +172,14 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Access an effect's stats. <see cref="null"/> if not found.
-		/// "Mod": The mod the effect belongs to (string).
+		/// "Mod": The mod the effect belongs to (Mod).
 		/// | "InternalName": The internal name (string).
-		/// | "UniqueName": The unique name (string).
+		/// | "UniqueName": The unique name (string) (should match the input string).
 		/// | "DisplayName": The displayed name (string).
 		/// | "Description": The description (string).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
-		/// | "Color": The color (Color).
-		/// | "Action": The method ran when triggered (Action[Player, Vector2, int, int, float]).
+		/// | "ColorFunc": The color (Color) if invoked.
+		/// | "Action": The method ran when triggered (Action[Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float]).
 		/// </summary>
 		/// <param name="effect">The unique effect name</param>
 		/// <returns>Dictionary[string, object]</returns>
@@ -177,6 +216,28 @@ namespace ClickerClassExampleMod
 		internal static bool IsClickerProj(Projectile proj)
 		{
 			return ClickerClass?.Call("IsClickerProj", versionString, proj) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if a projectile type belongs to the "clicker weapon" category.
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="type">The item type to be checked</param>
+		/// <returns><see langword="true"/> if that category</returns>
+		internal static bool IsClickerWeaponProj(int type)
+		{
+			return ClickerClass?.Call("IsClickerWeaponProj", versionString, type) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if a projectile belongs to the "clicker weapon" category.
+		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
+		/// </summary>
+		/// <param name="proj">The <see cref="Projectile"/> to be checked</param>
+		/// <returns><see langword="true"/> if that category</returns>
+		internal static bool IsClickerWeaponProj(Projectile proj)
+		{
+			return ClickerClass?.Call("IsClickerWeaponProj", versionString, proj) as bool? ?? false;
 		}
 
 		/// <summary>
@@ -331,7 +392,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if the player is wearing a specific set. Supported sets:
-		/// Motherboard, Overclock, Precursor, Mice
+		/// Motherboard, Overclock, Precursor, Mice, RGB
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetArmorSet(Player player, string set)
@@ -341,8 +402,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator.
-		/// Visual variants (i.e. EnchantedLED2) are not gettable
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetAccessory(Player player, string accessory)
@@ -352,13 +412,32 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
-		/// ChocolateChip, EnchantedLED, HandCream, StickyKeychain, GlassOfMilk, Cookie, ClickingGlove, AncientClickingGlove, RegalClickingGlove.
-		/// EnchantedLED and Cookie have a variant with "2" added to them that is a visual variation.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessory(Player player, string accessory)
 		{
 			ClickerClass?.Call("SetAccessory", versionString, player, accessory);
+		}
+
+		/// <summary>
+		/// Call to check if a specific accessory effect that spawns projectiles is enabled. Returns the item if enabled. Supported accessories:
+		/// Cookie, AMedal, SMedal, FMedal, BottomlessBoxOfPaperclips.
+		/// </summary>
+		/// <param name="player">The player</param>
+		internal static Item GetAccessoryItem(Player player, string accessory)
+		{
+			return ClickerClass?.Call("GetAccessoryItem", versionString, player, accessory) as Item ?? null;
+		}
+
+		/// <summary>
+		/// Call to set a specific player accessory effect that spawns projectiles. Supported accessories:
+		/// Cookie, AMedal, SMedal, FMedal, BottomlessBoxOfPaperclips.
+		/// </summary>
+		/// <param name="player">The player</param>
+		internal static void SetAccessoryItem(Player player, string accessory, Item item)
+		{
+			ClickerClass?.Call("SetAccessoryItem", versionString, player, accessory, item);
 		}
 
 		/// <summary>
@@ -453,7 +532,6 @@ namespace ClickerClassExampleMod
 		{
 			return ClickerClass?.Call("HasClickEffect", versionString, player, effect) as bool? ?? false;
 		}
-
 		#endregion
 	}
 }

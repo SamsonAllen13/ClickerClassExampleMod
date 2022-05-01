@@ -4,11 +4,16 @@ using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod.Projectiles.Clickers
 {
-	//Sample code for a clicker weapon. Currently, only RegisterClickerProjectile is required, the rest is up to you
-
+	//Sample code for a clicker projectile
 	//This projectile spawns and wiggles around for a bit more than a second, damaging enemies three times before disappearing
 	public class MiniClicker : ModProjectile
 	{
+		//Optional, if you only want this item to exist only when Clicker Class is enabled
+		public override bool IsLoadingEnabled(Mod mod)
+		{
+			return ClickerCompat.ClickerClass != null;
+		}
+
 		public override void SetStaticDefaults()
 		{
 			//You NEED to call this in SetStaticDefaults to make it count as a clicker projectile
@@ -17,19 +22,22 @@ namespace ClickerClassExampleMod.Projectiles.Clickers
 
 		public override void SetDefaults()
 		{
-			projectile.width = 16;
-			projectile.height = 16;
-			projectile.alpha = 255;
-			projectile.aiStyle = -1;
-			projectile.penetrate = -1;
-			projectile.timeLeft = 70;
-			projectile.friendly = true;
-			projectile.ignoreWater = true;
-			projectile.tileCollide = false;
+			//This call is mandatory as it sets common stats like DamageType which is shared between all clicker projectiles
+			ClickerCompat.SetClickerProjectileDefaults(Projectile);
+
+			Projectile.width = 16;
+			Projectile.height = 16;
+			Projectile.alpha = 255;
+			Projectile.aiStyle = -1;
+			Projectile.penetrate = -1;
+			Projectile.timeLeft = 70;
+			Projectile.friendly = true;
+			Projectile.ignoreWater = true;
+			Projectile.tileCollide = false;
 
 			//Most clicker projectiles use local immunity
-			projectile.usesLocalNPCImmunity = true;
-			projectile.localNPCHitCooldown = 30;
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = 30;
 		}
 
 		//Some custom AI, nothing clicker specific
@@ -39,20 +47,20 @@ namespace ClickerClassExampleMod.Projectiles.Clickers
 
 		public override void AI()
 		{
-			if (projectile.timeLeft < 255 / 30f)
+			if (Projectile.timeLeft < 255 / 30f)
 			{
-				projectile.alpha += 30;
-				if (projectile.alpha > 255)
+				Projectile.alpha += 30;
+				if (Projectile.alpha > 255)
 				{
-					projectile.alpha = 255;
+					Projectile.alpha = 255;
 				}
 			}
 			else
 			{
-				projectile.alpha -= 50;
-				if (projectile.alpha < 0)
+				Projectile.alpha -= 50;
+				if (Projectile.alpha < 0)
 				{
-					projectile.alpha = 0;
+					Projectile.alpha = 0;
 				}
 			}
 
@@ -61,15 +69,15 @@ namespace ClickerClassExampleMod.Projectiles.Clickers
 				//On spawn
 				for (int i = 0; i < 3; i++)
 				{
-					Dust dust = Dust.NewDustDirect(projectile.position, projectile.width, projectile.height, ClickerCompat.ClickerClass.DustType("MiceDust"));
+					Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ClickerCompat.ClickerClass.Find<ModDust>("MiceDust").Type);
 					dust.noGravity = true;
 				}
 				wiggleDirection = Main.rand.NextBool().ToDirectionInt();
 			}
 
-			if (wiggleDirection == 1 ? projectile.rotation < WiggleThreshold : projectile.rotation > -WiggleThreshold)
+			if (wiggleDirection == 1 ? Projectile.rotation < WiggleThreshold : Projectile.rotation > -WiggleThreshold)
 			{
-				projectile.rotation += wiggleDirection * WiggleSpeed;
+				Projectile.rotation += wiggleDirection * WiggleSpeed;
 			}
 			else
 			{
@@ -79,7 +87,7 @@ namespace ClickerClassExampleMod.Projectiles.Clickers
 
 		public override Color? GetAlpha(Color lightColor)
 		{
-			return Color.White * ((255 - projectile.alpha) / 255f);
+			return Color.White * Projectile.Opacity;
 		}
 	}
 }
