@@ -371,16 +371,16 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call to get the players' clicks per second
+		/// Call to get the players' clicks per second. Use Math.Floor if you need as integer.
 		/// </summary>
 		/// <param name="player">The player</param>
-		internal static int GetClickerPerSecond(Player player)
+		internal static float GetClickerPerSecond(Player player)
 		{
-			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerPerSecond") as int? ?? 0;
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerPerSecond") as float? ?? 0;
 		}
 
 		/// <summary>
-		/// Call to get the players' total clicks required for the given effect to trigger on the item
+		/// Call to get the players' total clicks required for the given effect to trigger on the item.
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="item">The clicker item</param>
