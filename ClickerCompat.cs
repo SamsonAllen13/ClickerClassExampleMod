@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 3, 2);
+		internal static readonly Version apiVersion = new Version(1, 3, 2, 6);
 
 		internal static string versionString;
 
@@ -333,6 +333,16 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
+		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker item to assign it an accessory type, so that items with that accessory type cannot be equipped together. Supported types:
+		/// ClickingGlove
+		/// </summary>
+		/// <param name="item">The clicker class item</param>
+		internal static void SetAccessoryType(Item item, string accessoryType)
+		{
+			ClickerClass?.Call("SetAccessoryType", versionString, item, accessoryType);
+		}
+
+		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker item to make it display total click count in the tooltip
 		/// </summary>
 		/// <param name="item">The clicker class item</param>
@@ -402,7 +412,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetAccessory(Player player, string accessory)
@@ -412,7 +422,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, HandCream, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, IcePack, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessory(Player player, string accessory)
@@ -531,6 +541,18 @@ namespace ClickerClassExampleMod
 		internal static bool HasClickEffect(Player player, string effect)
 		{
 			return ClickerClass?.Call("HasClickEffect", versionString, player, effect) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Sets an auto-reuse effect to be applied to the player. Will apply the fastest one onto the player (if there are multiple active ones)
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="speedFactor">The multiplier to use time of 1 when this effect is active. Rounds down the result, minimum is 2 (game limitation). Example: 6f -> effective use time = 1 * 6f -> 60 / 6f -> 10 cps</param>
+		/// <param name="controlledByKeyBind">This effect will only be active if the player toggles it using the keybind from Clicker Class dedicated to it</param>
+		/// <param name="preventsClickEffects">This effect will not activate Click Effects while active</param>
+		internal static void SetAutoReuseEffect(Player player, float speedFactor, bool controlledByKeyBind = false, bool preventsClickEffects = false)
+		{
+			ClickerClass?.Call("SetAutoReuseEffect", versionString, player, speedFactor, controlledByKeyBind, preventsClickEffects);
 		}
 		#endregion
 	}
