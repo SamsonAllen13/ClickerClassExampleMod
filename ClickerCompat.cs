@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 3, 2, 6);
+		internal static readonly Version apiVersion = new Version(1, 3, 3);
 
 		internal static string versionString;
 
@@ -128,10 +128,11 @@ namespace ClickerClassExampleMod
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="colorFunc">The (dynamic) text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <param name="preHardMode">If this effect primarily belongs to something available pre-hardmode</param>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false)
 		{
-			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action) as string;
+			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action, preHardMode) as string;
 		}
 
 		/// <summary>
@@ -144,11 +145,12 @@ namespace ClickerClassExampleMod
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="color">The text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
+		/// <param name="preHardMode">If this effect primarily belongs to something available pre-hardmode</param>
 		/// <remarks>For dynamic colors, use the Func[Color] overload</remarks>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action)
+		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false)
 		{
-			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action);
+			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action, preHardMode);
 		}
 
 		/// <summary>
@@ -180,6 +182,7 @@ namespace ClickerClassExampleMod
 		/// | "Amount": The amount of clicks to trigger the effect (int).
 		/// | "ColorFunc": The color (Color) if invoked.
 		/// | "Action": The method ran when triggered (Action[Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float]).
+		/// | "PreHardMode": Belongs to something available pre-hardmode (bool).
 		/// </summary>
 		/// <param name="effect">The unique effect name</param>
 		/// <returns>Dictionary[string, object]</returns>

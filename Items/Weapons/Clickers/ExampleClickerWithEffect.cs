@@ -37,7 +37,9 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 				{
 					Projectile.NewProjectile(source, position + 20 * Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi), Vector2.Zero, ModContent.ProjectileType<MiniClicker>(), (int)(damage * 0.2f), 0f, Main.myPlayer);
 				}
-			});
+			},
+			preHardMode: true);
+			//The last parameter flags it as available in pre-hardmode, useful for content referencing other effects
 
 			//We want to cache the result to make accessing it easier in other places.
 			//(Make sure to unload the saved string again!)
