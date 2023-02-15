@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 3, 3);
+		internal static readonly Version apiVersion = new Version(1, 3, 3); //TODO update on release
 
 		internal static string versionString;
 
@@ -173,8 +173,8 @@ namespace ClickerClassExampleMod
 		/// "Mod": The mod the effect belongs to (Mod).
 		/// | "InternalName": The internal name (string).
 		/// | "UniqueName": The unique name (string) (should match the input string).
-		/// | "DisplayName": The displayed name (string).
-		/// | "Description": The description (string).
+		/// | "DisplayName": The displayed name (LocalizedText).
+		/// | "Description": The description (LocalizedText).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
 		/// | "ColorFunc": The color (Color) if invoked.
 		/// | "Action": The method ran when triggered (Action[Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float]).
