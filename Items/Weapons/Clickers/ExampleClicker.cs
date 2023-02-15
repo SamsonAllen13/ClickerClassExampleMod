@@ -15,10 +15,8 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 
 		public override void SetStaticDefaults()
 		{
-			//You NEED to call this in SetStaticDefaults to make it count as a clicker weapon. also sets the default tooltip
+			//You NEED to call this in SetStaticDefaults to make it count as a clicker weapon
 			ClickerCompat.RegisterClickerWeapon(this);
-
-			DisplayName.SetDefault("Example Clicker");
 		}
 
 		public override void SetDefaults()

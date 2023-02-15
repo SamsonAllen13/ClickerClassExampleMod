@@ -18,16 +18,6 @@ namespace ClickerClassExampleMod.Items.Accessories
 		{
 			//You NEED to call this in SetStaticDefaults to make it count as a clicker related item
 			ClickerCompat.RegisterClickerItem(this);
-
-			DisplayName.SetDefault("Example Clicker Accessory");
-			Tooltip.SetDefault("'Big Red Button 2'" + "\n" +
-				"20% increased clicker damage" + "\n" +
-				"Reduces the amount of clicks required for a click effect by 1" + "\n" +
-				"Gain up to 15% clicker damage based on your amount of clicks within a second" + "\n" +
-				"Every 15 clicks releases a burst of damaging chocolate" + "\n" +
-				"Makes the radius pulsate up to 50% of the default radius" + "\n" +
-				"Pressing the '{$Mods.ClickerClass.Hotkeys.ClickerAccessory}' key will toggle auto click on all Clickers" + "\n" +
-				"While auto click is enabled, click rates are moderately decreased");
 		}
 
 		public override void SetDefaults()
