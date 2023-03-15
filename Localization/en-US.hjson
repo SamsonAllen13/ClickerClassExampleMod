@@ -33,7 +33,7 @@ Mods: {
 		ClickEffect: {
 			ExampleEffect: {
 				Name: Mini Clickers
-				Description: Creates 5 Mini Clickers around the cursor for 20% damage
+				Description: Creates {0} Mini Clickers around the cursor for {1}% damage
 			}
 		}
 	}
