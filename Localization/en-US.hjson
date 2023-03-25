@@ -1,0 +1,40 @@
+
+Mods: {
+	ClickerClassExampleMod: {
+		Items: {
+			ExampleClickerAccessory: {
+				DisplayName: Example Clicker Accessory
+				Tooltip:
+					'''
+					'Big Red Button 2'
+					20% increased clicker damage
+					Reduces the amount of clicks required for a click effect by 1
+					Gain up to 15% clicker damage based on your amount of clicks within a second
+					Every 15 clicks releases a burst of damaging chocolate
+					Makes the radius pulsate up to 50% of the default radius
+					Pressing the '{$Mods.ClickerClass.Keybinds.ClickerAccessory.DisplayName}' key will toggle auto click on all Clickers
+					While auto click is enabled, click rates are moderately decreased
+					'''
+			}
+
+			ExampleClicker: {
+				DisplayName: Example Clicker
+				Tooltip: "{$Mods.ClickerClass.Common.Tooltips.Clicker}"
+			}
+
+			ExampleClickerWithEffect: {
+				DisplayName: Example Clicker With Effect
+				Tooltip: "{$Mods.ClickerClass.Common.Tooltips.Clicker}"
+			}
+		}
+
+		Projectiles.MiniClicker.DisplayName: Mini Clicker
+
+		ClickEffect: {
+			ExampleEffect: {
+				Name: Mini Clickers
+				Description: Creates {0} Mini Clickers around the cursor for {1}% damage
+			}
+		}
+	}
+}

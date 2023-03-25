@@ -12,6 +12,9 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 	//A more advanced example using a custom click effect, which uses a custom clicker projectile
 	public class ExampleClickerWithEffect : ModItem
 	{
+		public static readonly int MiniClickerAmount = 5;
+		public static readonly int DamageRatioPercent = 20;
+
 		public static string ExampleEffect { get; private set; } = string.Empty;
 
 		public override void Unload()
@@ -27,25 +30,25 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 		public override void SetStaticDefaults()
 		{
 			//Here we register an optional border/outline texture aswell
-			ClickerCompat.RegisterClickerWeapon(this, borderTexture: "ClickerClassExampleMod/Items/Weapons/Clickers/ExampleClickerWithEffect_Outline");
+			ClickerCompat.RegisterClickerWeapon(this, borderTexture: Texture + "_Outline");
 
 			//Here we register a click effect which we reference in SetDefaults through AddEffect
-			string uniqueName = ClickerCompat.RegisterClickEffect(Mod, "ExampleEffect", "Mini Clickers", "Creates 5 Mini Clickers around the cursor for 20% damage", 6, Color.Red, delegate (Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, int type, int damage, float knockBack)
+			string uniqueName = ClickerCompat.RegisterClickEffect(Mod, "ExampleEffect", 6, Color.Red, delegate (Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, int type, int damage, float knockBack)
 			{
 				SoundEngine.PlaySound(SoundID.Chat, position);
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < MiniClickerAmount; i++)
 				{
-					Projectile.NewProjectile(source, position + 20 * Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi), Vector2.Zero, ModContent.ProjectileType<MiniClicker>(), (int)(damage * 0.2f), 0f, Main.myPlayer);
+					Projectile.NewProjectile(source, position + 20 * Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi), Vector2.Zero, ModContent.ProjectileType<MiniClicker>(), (int)(damage * DamageRatioPercent / 100f), 0f, Main.myPlayer);
 				}
 			},
-			preHardMode: true);
-			//The last parameter flags it as available in pre-hardmode, useful for content referencing other effects
+			preHardMode: true,
+			descriptionArgs: new object[] { MiniClickerAmount, DamageRatioPercent });
+			//The preHardMode parameter flags it as available in pre-hardmode, useful for content referencing other effects
+			//The next two parameters are optional and used for localization usage with substitutions for display name and description. Here the amount of mini clickers spawned and the damage they deal is reflected in the description (found in the localization file) so we need to supply those
 
 			//We want to cache the result to make accessing it easier in other places.
 			//(Make sure to unload the saved string again!)
 			ExampleEffect = uniqueName;
-
-			DisplayName.SetDefault("Example Clicker With Effect");
 		}
 
 		public override void SetDefaults()

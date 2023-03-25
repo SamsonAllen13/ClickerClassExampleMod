@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 3, 3);
+		internal static readonly Version apiVersion = new Version(1, 3, 3); //TODO update on release
 
 		internal static string versionString;
 
@@ -79,7 +79,7 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModProjectile.SetStaticDefaults"/> to register this projectile into the "clicker class" category
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this projectile into the "clicker class" category
 		/// </summary>
 		/// <param name="modProj">The <see cref="ModProjectile"/> that is to be registered</param>
 		internal static void RegisterClickerProjectile(ModProjectile modProj)
@@ -88,7 +88,7 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModProjectile.SetStaticDefaults"/> to register this projectile into the "clicker weapon" category.
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this projectile into the "clicker weapon" category.
 		/// <br>This is only for projectiles spawned by clickers directly (Item.shoot). Clicker Class only uses one such projectile for all it's clickers. Only use this if you know what you are doing!</br>
 		/// <br>Various effects will only proc "on click" by checking this category instead of "all clicker class projectiles"</br>
 		/// </summary>
@@ -99,7 +99,7 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModItem.SetStaticDefaults"/> to register this item into the "clicker class" category
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this item into the "clicker class" category
 		/// </summary>
 		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
 		internal static void RegisterClickerItem(ModItem modItem)
@@ -108,7 +108,7 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModItem.SetStaticDefaults"/> to register this weapon into the "clicker class" category as a "clicker".
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this weapon into the "clicker class" category as a "clicker".
 		/// Do not call <see cref="RegisterClickerItem"/> with it as this method does this already by itself
 		/// </summary>
 		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
@@ -119,38 +119,38 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModItem.SetStaticDefaults"/> to register this click effect
+		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModType.SetStaticDefaults"/> to register this click effect
 		/// </summary>
 		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
 		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
-		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
-		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="colorFunc">The (dynamic) text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <param name="preHardMode">If this effect primarily belongs to something available pre-hardmode</param>
+		/// <param name="nameArgs">Arguments that need to be bound to the display name</param>
+		/// <param name="descriptionArgs">Arguments that need to be bound to the description</param>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false)
+		internal static string RegisterClickEffect(Mod mod, string internalName, int amount, Func<Color> colorFunc, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false, object[] nameArgs = null, object[] descriptionArgs = null)
 		{
-			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, displayName, description, amount, colorFunc, action, preHardMode) as string;
+			return ClickerClass?.Call("RegisterClickEffect", versionString, mod, internalName, amount, colorFunc, action, preHardMode, nameArgs, descriptionArgs) as string;
 		}
 
 		/// <summary>
-		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModItem.SetStaticDefaults"/> to register this click effect
+		/// Call this in <see cref="Mod.PostSetupContent"/> or <see cref="ModType.SetStaticDefaults"/> to register this click effect
 		/// </summary>
 		/// <param name="mod">The mod this effect belongs to. ONLY USE YOUR OWN MOD INSTANCE FOR THIS!</param>
 		/// <param name="internalName">The internal name of the effect. Turns into the unique name combined with the associated mod</param>
-		/// <param name="displayName">The name of the effect, null if you use lang keys (Defaults to ClickEffect.[internalName].Name)</param>
-		/// <param name="description">The basic description of the effect, string.Empty for none, null if you use lang keys (Defaults to ClickEffect.[internalName].Description)</param>
 		/// <param name="amount">The amount of clicks required to trigger the effect</param>
 		/// <param name="color">The text color representing the effect in the tooltip</param>
 		/// <param name="action">The method that runs when the effect is triggered</param>
 		/// <param name="preHardMode">If this effect primarily belongs to something available pre-hardmode</param>
+		/// <param name="nameArgs">Arguments that need to be bound to the display name</param>
+		/// <param name="descriptionArgs">Arguments that need to be bound to the description</param>
 		/// <remarks>For dynamic colors, use the Func[Color] overload</remarks>
 		/// <returns>The unique identifier, null if an exception occured. READ THE LOGS!</returns>
-		internal static string RegisterClickEffect(Mod mod, string internalName, string displayName, string description, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false)
+		internal static string RegisterClickEffect(Mod mod, string internalName, int amount, Color color, Action<Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float> action, bool preHardMode = false, object[] nameArgs = null, object[] descriptionArgs = null)
 		{
-			return RegisterClickEffect(mod, internalName, displayName, description, amount, () => color, action, preHardMode);
+			return RegisterClickEffect(mod, internalName, amount, () => color, action, preHardMode, nameArgs, descriptionArgs);
 		}
 
 		/// <summary>
@@ -177,8 +177,8 @@ namespace ClickerClassExampleMod
 		/// "Mod": The mod the effect belongs to (Mod).
 		/// | "InternalName": The internal name (string).
 		/// | "UniqueName": The unique name (string) (should match the input string).
-		/// | "DisplayName": The displayed name (string).
-		/// | "Description": The description (string).
+		/// | "DisplayName": The displayed name (LocalizedText).
+		/// | "Description": The description (LocalizedText).
 		/// | "Amount": The amount of clicks to trigger the effect (int).
 		/// | "ColorFunc": The color (Color) if invoked.
 		/// | "Action": The method ran when triggered (Action[Player, EntitySource_ItemUse_WithAmmo, Vector2, int, int, float]).
