@@ -68,6 +68,17 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
+		/// Call in <see cref="ModItem.SetDefaults"/> to set important default fields for a "sfx button". Set fields:
+		/// maxStack.
+		/// Only change them afterwards if you know what you are doing!
+		/// </summary>
+		/// <param name="item">The <see cref="Item"/> to set the defaults for</param>
+		internal static void SetSFXButtonDefaults(Item item)
+		{
+			ClickerClass?.Call("SetSFXButtonDefaults", versionString, item);
+		}
+
+		/// <summary>
 		/// Call in <see cref="ModProjectile.SetDefaults"/> to set important default fields for a clicker projectile. Set fields:
 		/// DamageType.
 		/// Only change them afterwards if you know what you are doing!
@@ -108,7 +119,7 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this weapon into the "clicker class" category as a "clicker".
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this weapon into the "clicker class" category as a "clicker".<br/>
 		/// Do not call <see cref="RegisterClickerItem"/> with it as this method does this already by itself
 		/// </summary>
 		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
@@ -116,6 +127,18 @@ namespace ClickerClassExampleMod
 		internal static void RegisterClickerWeapon(ModItem modItem, string borderTexture = null)
 		{
 			ClickerClass?.Call("RegisterClickerWeapon", versionString, modItem, borderTexture);
+		}
+
+		/// <summary>
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this item into the "sfx button" category.<br/>
+		/// It will automatically contribute to the active "sfx buttons" when in the inventory<br/>
+		/// Do not call <see cref="RegisterClickerItem"/> with it as this method does this already by itself
+		/// </summary>
+		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
+		/// <param name="playSoundAction">The method that runs that will play the sound</param>
+		internal static void RegisterSFXButton(ModItem modItem, Action<int> playSoundAction)
+		{
+			ClickerClass?.Call("RegisterSFXButton", versionString, modItem, playSoundAction);
 		}
 
 		/// <summary>
@@ -261,6 +284,46 @@ namespace ClickerClassExampleMod
 		internal static bool IsClickerItem(Item item)
 		{
 			return ClickerClass?.Call("IsClickerItem", versionString, item) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if an item is an "sfx button"
+		/// </summary>
+		/// <param name="item">The item to be checked</param>
+		/// <returns><see langword="true"/> if an "sfx button"</returns>
+		internal static bool IsSFXButton(Item item)
+		{
+			return ClickerClass?.Call("IsSFXButton", versionString, item) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to check if an item type is an "sfx button"
+		/// </summary>
+		/// <param name="type">The item type to be checked</param>
+		/// <returns><see langword="true"/> if an "sfx button"</returns>
+		internal static bool IsSFXButton(int type)
+		{
+			return ClickerClass?.Call("IsSFXButton", versionString, type) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Call this to get the sound playing method of an "sfx button"
+		/// </summary>
+		/// <param name="item">The item to be checked</param>
+		/// <returns><see langword="null"/> if not "sfx button"</returns>
+		internal static Action<int> GetSFXButton(Item item)
+		{
+			return ClickerClass?.Call("GetSFXButton", versionString, item) as Action<int> ?? null;
+		}
+
+		/// <summary>
+		/// Call this to get the sound playing method of an "sfx button"
+		/// </summary>
+		/// <param name="type">The item type to be checked</param>
+		/// <returns><see langword="null"/> if not "sfx button"</returns>
+		internal static Action<int> GetSFXButton(int type)
+		{
+			return ClickerClass?.Call("GetSFXButton", versionString, type) as Action<int> ?? null;
 		}
 
 		/// <summary>
@@ -544,6 +607,40 @@ namespace ClickerClassExampleMod
 		internal static bool HasClickEffect(Player player, string effect)
 		{
 			return ClickerClass?.Call("HasClickEffect", versionString, player, effect) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Returns all currently active "sfx button" stacks.<br/>
+		/// Use with <see cref="GetSFXButton"/> to get the sound
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <returns>Dictionary mapping item type to stack</returns>
+		internal static IReadOnlyDictionary<int, int> GetAllSFXButtonStacks(Player player)
+		{
+			return ClickerClass?.Call("GetAllSFXButtonStacks", versionString, player) as IReadOnlyDictionary<int, int> ?? null;
+		}
+
+		/// <summary>
+		/// Counts the stack of the given <paramref name="item"/> up by its stack<br/>
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="item">The item</param>
+		/// <returns><see langword="true"/> it reached 5</returns>
+		internal static bool AddSFXButtonStack(Player player, Item item)
+		{
+			return ClickerClass?.Call("AddSFXButtonStack", versionString, player, item) as bool? ?? false;
+		}
+
+		/// <summary>
+		/// Counts the stack of the given item type up by <paramref name="stack"/><br/>
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="type">The item type</param>
+		/// <param name="stack">The stack to add</param>
+		/// <returns><see langword="true"/> if it reached 5</returns>
+		internal static bool AddSFXButtonStack(Player player, int type, int stack)
+		{
+			return ClickerClass?.Call("AddSFXButtonStack", versionString, player, type, stack) as bool? ?? false;
 		}
 
 		/// <summary>

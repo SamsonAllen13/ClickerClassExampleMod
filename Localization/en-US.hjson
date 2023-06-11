@@ -1,4 +1,3 @@
-
 Mods: {
 	ClickerClassExampleMod: {
 		Items: {
@@ -25,6 +24,17 @@ Mods: {
 			ExampleClickerWithEffect: {
 				DisplayName: Example Clicker With Effect
 				Tooltip: "{$Mods.ClickerClass.Common.Tooltips.Clicker}"
+			}
+
+			ExampleSFXButton.DisplayName: Example SFX Button
+
+			ExampleAdvancedSFXButton: {
+				DisplayName: Example Advanced SFX Button
+				Tooltip:
+					'''
+					Plays a random sound from existing SFX Buttons
+					{$Mods.ClickerClass.Common.Tooltips.SFXButtonTip}
+					'''
 			}
 		}
 

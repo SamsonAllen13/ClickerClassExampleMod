@@ -29,7 +29,7 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			ClickerCompat.SetColor(Item, Color.White);
 			ClickerCompat.SetDust(Item, 6);
 
-			//You can use Clicker Classes base effects (you can find them in the source code), or your own ones
+			//You can use Clicker Classes' base effects (you can find them in the source code), or your own ones
 			ClickerCompat.AddEffect(Item, "ClickerClass:DoubleClick");
 
 			Item.damage = 4;
