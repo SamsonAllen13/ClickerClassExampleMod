@@ -415,7 +415,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect is enabled (i.e. "Gamer Crate" will have multiple effects enabled). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static bool GetAccessory(Player player, string accessory)
@@ -425,7 +425,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect (i.e. to emulate "Gamer Crate" you need to have set multiple effects). Supported accessories:
-		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, GoldenTicket, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
+		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessory(Player player, string accessory)
@@ -435,7 +435,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to check if a specific accessory effect that spawns projectiles is enabled. Returns the item if enabled. Supported accessories:
-		/// Cookie, AMedal, SMedal, FMedal, BottomlessBoxOfPaperclips.
+		/// Cookie, AMedal, SMedal, FMedal, GoldenTicket, BottomlessBoxOfPaperclips.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static Item GetAccessoryItem(Player player, string accessory)
@@ -445,7 +445,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to set a specific player accessory effect that spawns projectiles. Supported accessories:
-		/// Cookie, AMedal, SMedal, FMedal, BottomlessBoxOfPaperclips.
+		/// Cookie, AMedal, SMedal, FMedal, GoldenTicket, BottomlessBoxOfPaperclips.
 		/// </summary>
 		/// <param name="player">The player</param>
 		internal static void SetAccessoryItem(Player player, string accessory, Item item)
