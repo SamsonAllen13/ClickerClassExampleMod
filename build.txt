@@ -1,5 +1,5 @@
 author = DivermanSam, Barometz and direwolf420
-version = 1.4
+version = 1.4.2
 displayName = The Clicker Class Example Mod
 homepage = https://github.com/SamsonAllen13/ClickerClassExampleMod
 buildIgnore = *.csproj, *.sln, *.user, *.md, obj\*, bin\*, .vs\*, .git\*, .gitignore

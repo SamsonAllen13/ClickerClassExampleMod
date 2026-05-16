@@ -23,7 +23,7 @@ namespace ClickerClassExampleMod
 
 		//This is the version of the calls that are used for the mod.
 		//If Clicker Class updates, it will keep working on the outdated calls, but new features might not be available
-		internal static readonly Version apiVersion = new Version(1, 4);
+		internal static readonly Version apiVersion = new Version(1, 4, 2);
 
 		internal static string versionString;
 
@@ -428,6 +428,7 @@ namespace ClickerClassExampleMod
 		#endregion
 
 		#region Player Calls
+		[Obsolete("Use GetClickerRadiusNew instead", error: false)]
 		/// <summary>
 		/// Call to get the players' clicker radius (multiply by 100 for pixels)
 		/// </summary>
@@ -435,6 +436,15 @@ namespace ClickerClassExampleMod
 		internal static float GetClickerRadius(Player player)
 		{
 			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerRadius") as float? ?? 1f;
+		}
+
+		/// <summary>
+		/// Call to get the players' clicker radius modifier (call ApplyTo(100) to get the radius in pixels)
+		/// </summary>
+		/// <param name="player">The player</param>
+		internal static StatModifier GetClickerRadiusNew(Player player)
+		{
+			return ClickerClass?.Call("GetPlayerStat", versionString, player, "ClickerRadius") as StatModifier? ?? StatModifier.Default;
 		}
 
 		/// <summary>
@@ -569,13 +579,24 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call to add to the players' clicker radius (default 1f)
+		/// Call to add to the players' clicker radius (default 1f), lower limit is the clicker weapon's base radius
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="add">distance added in 100 pixels (1f = 100 pixel)</param>
 		internal static void SetClickerRadiusAdd(Player player, float add)
 		{
 			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerRadiusAdd", add);
+		}
+
+		/// <summary>
+		/// Call to multiply the players' clicker radius, affecting both bonuses and the clicker weapon's base radius.<br/>
+		/// Usually used for decreases with a number < 1f
+		/// </summary>
+		/// <param name="player">The player</param>
+		/// <param name="mult">Percentage to multiply the radius with</param>
+		internal static void SetClickerRadiusMult(Player player, float mult)
+		{
+			ClickerClass?.Call("SetPlayerStat", versionString, player, "clickerRadiusMult", mult);
 		}
 
 		/// <summary>
