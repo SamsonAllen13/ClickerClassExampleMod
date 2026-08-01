@@ -27,7 +27,7 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			//Use these methods to adjust clicker weapon specific stats
 			ClickerCompat.SetRadius(Item, 0.3f);
 			ClickerCompat.SetColor(Item, Color.White);
-			ClickerCompat.SetDust(Item, 6);
+			ClickerCompat.SetDust(Item, 6, 100);
 
 			//You can use Clicker Classes' base effects (you can find them in the source code), or your own ones
 			ClickerCompat.AddEffect(Item, "ClickerClass:DoubleClick");

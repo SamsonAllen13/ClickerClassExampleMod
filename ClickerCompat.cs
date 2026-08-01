@@ -388,14 +388,17 @@ namespace ClickerClassExampleMod
 			ClickerClass?.Call("AddEffect", versionString, item, effects);
 		}
 
+		internal const int DefaultDustAlpha = 75;
+
 		/// <summary>
 		/// Call in <see cref="ModItem.SetDefaults"/> for a clicker weapon to set its dust type when it's used
 		/// </summary>
 		/// <param name="item">The clicker weapon</param>
 		/// <param name="type">the dust type</param>
-		internal static void SetDust(Item item, int type)
+		/// <param name="alpha">the dust alpha</param>
+		internal static void SetDust(Item item, int type, int alpha = DefaultDustAlpha)
 		{
-			ClickerClass?.Call("SetDust", versionString, item, type);
+			ClickerClass?.Call("SetDust", versionString, item, type, alpha);
 		}
 
 		/// <summary>
@@ -403,6 +406,7 @@ namespace ClickerClassExampleMod
 		/// ClickingGlove
 		/// </summary>
 		/// <param name="item">The clicker class item</param>
+		/// <param name="accessoryType">The accessoryType</param>
 		internal static void SetAccessoryType(Item item, string accessoryType)
 		{
 			ClickerClass?.Call("SetAccessoryType", versionString, item, accessoryType);
@@ -428,11 +432,11 @@ namespace ClickerClassExampleMod
 		#endregion
 
 		#region Player Calls
-		[Obsolete("Use GetClickerRadiusNew instead", error: false)]
 		/// <summary>
 		/// Call to get the players' clicker radius (multiply by 100 for pixels)
 		/// </summary>
 		/// <param name="player">The player</param>
+		[Obsolete("Use GetClickerRadiusNew instead", error: false)]
 		internal static float GetClickerRadius(Player player)
 		{
 			return ClickerClass?.Call("GetPlayerStat", versionString, player, "clickerRadius") as float? ?? 1f;
@@ -481,6 +485,7 @@ namespace ClickerClassExampleMod
 		/// Motherboard, Overclock, Precursor, Mice, RGB
 		/// </summary>
 		/// <param name="player">The player</param>
+		/// <param name="set">The set name</param>
 		internal static bool GetArmorSet(Player player, string set)
 		{
 			return ClickerClass?.Call("GetArmorSet", versionString, player, set) as bool? ?? false;
@@ -491,6 +496,7 @@ namespace ClickerClassExampleMod
 		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
+		/// <param name="accessory">The accessory name</param>
 		internal static bool GetAccessory(Player player, string accessory)
 		{
 			return ClickerClass?.Call("GetAccessory", versionString, player, accessory) as bool? ?? false;
@@ -501,6 +507,7 @@ namespace ClickerClassExampleMod
 		/// ChocolateChip, EnchantedLED, EnchantedLED2, StickyKeychain, GlassOfMilk, CookieVisual, CookieVisual2, ClickingGlove, AncientClickingGlove, RegalClickingGlove, PortableParticleAccelerator, MouseTrap, HotKeychain, TriggerFinger, ButtonMasher, AimAssistModule, AimbotModule.
 		/// </summary>
 		/// <param name="player">The player</param>
+		/// <param name="accessory">The accessory name</param>
 		internal static void SetAccessory(Player player, string accessory)
 		{
 			ClickerClass?.Call("SetAccessory", versionString, player, accessory);
@@ -511,6 +518,7 @@ namespace ClickerClassExampleMod
 		/// Cookie, AMedal, SMedal, FMedal, GoldenTicket, BottomlessBoxOfPaperclips.
 		/// </summary>
 		/// <param name="player">The player</param>
+		/// <param name="accessory">The accessory name</param>
 		internal static Item GetAccessoryItem(Player player, string accessory)
 		{
 			return ClickerClass?.Call("GetAccessoryItem", versionString, player, accessory) as Item ?? null;
@@ -521,6 +529,8 @@ namespace ClickerClassExampleMod
 		/// Cookie, AMedal, SMedal, FMedal, GoldenTicket, BottomlessBoxOfPaperclips.
 		/// </summary>
 		/// <param name="player">The player</param>
+		/// <param name="accessory">The accessory name</param>
+		/// <param name="item">The item</param>
 		internal static void SetAccessoryItem(Player player, string accessory, Item item)
 		{
 			ClickerClass?.Call("SetAccessoryItem", versionString, player, accessory, item);
@@ -590,7 +600,7 @@ namespace ClickerClassExampleMod
 
 		/// <summary>
 		/// Call to multiply the players' clicker radius, affecting both bonuses and the clicker weapon's base radius.<br/>
-		/// Usually used for decreases with a number < 1f
+		/// Usually used for decreases with a number less than 1f
 		/// </summary>
 		/// <param name="player">The player</param>
 		/// <param name="mult">Percentage to multiply the radius with</param>
