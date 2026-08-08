@@ -32,6 +32,9 @@ namespace ClickerClassExampleMod.Items.Weapons.Clickers
 			//Here we register an optional border/outline texture aswell
 			ClickerCompat.RegisterClickerWeapon(this, borderTexture: Texture + "_Outline");
 
+			//If you want your clicker to not show up on the Clicker Catalogue UI, include "hintTooltip: LocalizedText.Empty" and "obtainmentCondition: () => false" in the parameters above
+			//Or if you have conditional obtainment (config etc. (NOT something basic like dropped from an enemy during daytime)), add "obtainmentCondition: () => CONDITIONHERE"
+
 			//Here we register a click effect which we reference in SetDefaults through AddEffect
 			string uniqueName = ClickerCompat.RegisterClickEffect(Mod, "ExampleEffect", 6, Color.Red, delegate (Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, int type, int damage, float knockBack)
 			{

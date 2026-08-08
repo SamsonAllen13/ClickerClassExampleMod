@@ -19,11 +19,13 @@ Mods: {
 			ExampleClicker: {
 				DisplayName: Example Clicker
 				Tooltip: "{$Mods.ClickerClass.Common.Tooltips.Clicker}"
+				Hint: Obtained from crafting with Wood
 			}
 
 			ExampleClickerWithEffect: {
 				DisplayName: Example Clicker With Effect
 				Tooltip: "{$Mods.ClickerClass.Common.Tooltips.Clicker}"
+				Hint: Obtained from crafting with Magma Stone
 			}
 
 			ExampleSFXButton.DisplayName: Example SFX Button

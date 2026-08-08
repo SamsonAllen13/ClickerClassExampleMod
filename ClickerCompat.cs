@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace ClickerClassExampleMod
@@ -90,7 +91,8 @@ namespace ClickerClassExampleMod
 		}
 
 		/// <summary>
-		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this projectile into the "clicker class" category
+		/// Call this in <see cref="ModType.SetStaticDefaults"/> to register this projectile into the "clicker class" category.
+		/// This will apply armor penetration and hit direction defaults
 		/// </summary>
 		/// <param name="modProj">The <see cref="ModProjectile"/> that is to be registered</param>
 		internal static void RegisterClickerProjectile(ModProjectile modProj)
@@ -124,9 +126,11 @@ namespace ClickerClassExampleMod
 		/// </summary>
 		/// <param name="modItem">The <see cref="ModItem"/> that is to be registered</param>
 		/// <param name="borderTexture">The path to the border texture (optional)</param>
-		internal static void RegisterClickerWeapon(ModItem modItem, string borderTexture = null)
+		/// <param name="hintTooltip">A custom obtainment hint tooltip. If left unassigned, will be automatically generated in the localization file for your item. If set to <see cref="LocalizedText.Empty"/>, no hint tooltip will be set.</param>
+		/// <param name="obtainmentCondition">A custom obtainment condition. This should be generic and only used for things where an item cannot be obtained legit, like a specific world seed or config toggle. If left unassigned, will be assumed to always obtainable.</param>
+		internal static void RegisterClickerWeapon(ModItem modItem, string borderTexture = null, LocalizedText hintTooltip = null, Func<bool> obtainmentCondition = null)
 		{
-			ClickerClass?.Call("RegisterClickerWeapon", versionString, modItem, borderTexture);
+			ClickerClass?.Call("RegisterClickerWeapon", versionString, modItem, borderTexture, hintTooltip, obtainmentCondition);
 		}
 
 		/// <summary>
